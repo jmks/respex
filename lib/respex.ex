@@ -7,13 +7,22 @@ defmodule Respex do
   @lf "\n"
   @crlf @cr <> @lf
 
-  def encode(value)
+  defmodule Types do
+    def simple_string(str), do: {:simple_string, str}
+    def error(message, prefix \\ ""), do: {:error, message, prefix}
+  end
 
   @doc """
   Encoding for nil.
 
   Encoded as a bulk string with size -1
   """
+  def encode(value)
+
+  def encode({:simple_string, str}), do: encode_simple_string(str)
+
+  def encode({:error, message, prefix}), do: encode_error(message, prefix)
+
   def encode(nil), do: {:ok, "$-1\r\n"}
 
   def encode(string) when is_binary(string) do
