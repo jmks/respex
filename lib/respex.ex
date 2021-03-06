@@ -24,6 +24,12 @@ defmodule Respex do
     end
   end
 
+  def encode(int) when is_integer(int) do
+    encoded = Enum.join([":", int, @crlf], "")
+
+    {:ok, encoded}
+  end
+
   def encode_simple_string(string) when is_binary(string) do
     if bulk_string?(string) do
       {:error, "string contains #{@cr} or #{@lf}"}
