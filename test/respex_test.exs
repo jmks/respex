@@ -20,5 +20,10 @@ defmodule RespexTest do
       assert {:ok, ":0\r\n"} == Respex.encode(0)
       assert {:ok, ":1000\r\n"} == Respex.encode(1000)
     end
+
+    test "errors" do
+      assert {:ok, "-ERR unknown command 'foobar'"} == Respex.encode_error("unknown command 'foobar'", "ERR")
+      assert {:ok, "-WRONGTYPE Operation against a key holding the wrong kind of value"} == Respex.encode_error("Operation against a key holding the wrong kind of value", "WRONGTYPE")
+    end
   end
 end

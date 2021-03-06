@@ -30,6 +30,16 @@ defmodule Respex do
     {:ok, encoded}
   end
 
+  def encode_error(message, prefix \\ "") do
+    encoded_message = if prefix == "" do
+      message
+    else
+      "#{prefix} #{message}"
+    end
+
+    {:ok, "-#{encoded_message}"}
+  end
+
   def encode_simple_string(string) when is_binary(string) do
     if bulk_string?(string) do
       {:error, "string contains #{@cr} or #{@lf}"}
