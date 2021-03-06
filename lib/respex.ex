@@ -48,7 +48,7 @@ defmodule Respex do
       "#{prefix} #{message}"
     end
 
-    {:ok, join(["-", encoded_message])}
+    {:ok, join(["-", encoded_message, @crlf])}
   end
 
   def encode_simple_string(string) when is_binary(string) do

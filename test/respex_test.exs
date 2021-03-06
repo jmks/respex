@@ -24,8 +24,8 @@ defmodule RespexTest do
     end
 
     test "errors" do
-      assert {:ok, "-ERR unknown command 'foobar'"} == Respex.encode_error("unknown command 'foobar'", "ERR")
-      assert {:ok, "-WRONGTYPE Operation against a key holding the wrong kind of value"} == Respex.encode_error("Operation against a key holding the wrong kind of value", "WRONGTYPE")
+      assert {:ok, "-ERR unknown command 'foobar'\r\n"} == Respex.encode_error("unknown command 'foobar'", "ERR")
+      assert {:ok, "-WRONGTYPE Operation against a key holding the wrong kind of value\r\n"} == Respex.encode_error("Operation against a key holding the wrong kind of value", "WRONGTYPE")
     end
 
     test "lists" do
