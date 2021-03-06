@@ -33,6 +33,7 @@ defmodule RespexTest do
       assert {:ok, "*2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n"} == Respex.encode(["foo", "bar"])
       assert {:ok, "*3\r\n:1\r\n:2\r\n:3\r\n"} == Respex.encode([1,2,3])
       assert {:ok, "*5\r\n:1\r\n:2\r\n:3\r\n:4\r\n$6\r\nfoobar\r\n"} == Respex.encode([1,2,3,4,"foobar"])
+      assert {:ok, "*3\r\n$3\r\nfoo\r\n$-1\r\n$3\r\nbar\r\n"} == Respex.encode(["foo",nil,"bar"])
       assert {:error, "can't encode %{a: 1}"} == Respex.encode([1, %{a: 1}])
     end
 
