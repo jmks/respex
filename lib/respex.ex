@@ -17,15 +17,24 @@ defmodule Respex do
   def encode(nil), do: {:ok, "$-1\r\n"}
 
   def encode(string) when is_binary(string) do
-    if bulk_string?(string) do
-      encode_bulk_string(string)
-    else
-      encode_simple_string(string)
-    end
+    encode_bulk_string(string)
   end
 
   def encode(int) when is_integer(int) do
     {:ok, join([":", int, @crlf])}
+  end
+
+  def encode(list) when is_list(list) do
+    count = length(list)
+    encoded_contents = Enum.map(list, &encode/1)
+
+    if Enum.all?(encoded_contents, fn {state, _} -> state == :ok end) do
+      contents = Enum.map(encoded_contents, fn {:ok, e} -> e end)
+
+      {:ok, join(["*", count, @crlf, contents])}
+    else
+      Enum.find(encoded_contents, fn {state, _} -> state == :error end)
+    end
   end
 
   def encode_error(message, prefix \\ "") do
