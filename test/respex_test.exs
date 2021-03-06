@@ -11,5 +11,9 @@ defmodule RespexTest do
       assert {:ok, "$6\r\nfoobar\r\n"} == Respex.encode_bulk_string("foobar")
       assert {:ok, "$0\r\n\r\n"} == Respex.encode_bulk_string("")
     end
+
+    test "null blank string" do
+      assert {:ok, "$-1\r\n"} == Respex.encode(nil)
+    end
   end
 end
