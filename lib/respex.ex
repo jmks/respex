@@ -37,6 +37,10 @@ defmodule Respex do
     end
   end
 
+  def encode(unknown) do
+    {:error, "can't encode #{inspect unknown}"}
+  end
+
   def encode_error(message, prefix \\ "") do
     encoded_message = if prefix == "" do
       message

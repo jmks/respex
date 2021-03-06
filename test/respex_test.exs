@@ -5,6 +5,8 @@ defmodule RespexTest do
     test "simple strings" do
       assert {:ok, "+OK\r\n"} == Respex.encode_simple_string("OK")
       assert {:ok, "+Hello, World\r\n"} == Respex.encode_simple_string("Hello, World")
+
+      assert {:error, "string contains \r or \n"} == Respex.encode_simple_string("Hello\rWorld")
     end
 
     test "bulk strings" do
@@ -29,6 +31,9 @@ defmodule RespexTest do
     test "lists" do
       assert {:ok, "*0\r\n"} == Respex.encode([])
       assert {:ok, "*2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n"} == Respex.encode(["foo", "bar"])
+      assert {:ok, "*3\r\n:1\r\n:2\r\n:3\r\n"} == Respex.encode([1,2,3])
+      assert {:ok, "*5\r\n:1\r\n:2\r\n:3\r\n:4\r\n$6\r\nfoobar\r\n"} == Respex.encode([1,2,3,4,"foobar"])
+      assert {:error, "can't encode %{a: 1}"} == Respex.encode([1, %{a: 1}])
     end
   end
 end
