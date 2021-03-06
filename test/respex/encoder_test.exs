@@ -1,5 +1,5 @@
 defmodule EncoderTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   alias Respex.Encoder.Types
 
