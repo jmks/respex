@@ -1,18 +1,32 @@
 defmodule Respex do
   @moduledoc """
-  Documentation for `Respex`.
+  Respex
   """
 
-  @doc """
-  Hello world.
+  @cr "\r"
+  @lf "\n"
+  @crlf @cr <> @lf
 
-  ## Examples
+  def encode_simple_string(string) when is_binary(string) do
+    if bulk_string?(string) do
+      {:error, "string contains #{@cr} or #{@lf}"}
+    else
+      encoded = Enum.join(["+", string, @crlf], "")
 
-      iex> Respex.hello()
-      :world
-
-  """
-  def hello do
-    :world
+      {:ok, encoded}
+    end
   end
+
+  def encode_bulk_string(string) do
+    bytes = byte_size(string)
+    encoded = Enum.join(["$", bytes, @crlf, string, @crlf])
+
+    {:ok, encoded}
+  end
+
+  defp bulk_string?(string) do
+    String.contains?(string, @cr) or String.contains?(string, @lf)
+  end
+
+  # def decode(string) when is_binary(string)
 end
