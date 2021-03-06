@@ -25,9 +25,7 @@ defmodule Respex do
   end
 
   def encode(int) when is_integer(int) do
-    encoded = Enum.join([":", int, @crlf], "")
-
-    {:ok, encoded}
+    {:ok, join([":", int, @crlf])}
   end
 
   def encode_error(message, prefix \\ "") do
@@ -37,27 +35,28 @@ defmodule Respex do
       "#{prefix} #{message}"
     end
 
-    {:ok, "-#{encoded_message}"}
+    {:ok, join(["-", encoded_message])}
   end
 
   def encode_simple_string(string) when is_binary(string) do
     if bulk_string?(string) do
       {:error, "string contains #{@cr} or #{@lf}"}
     else
-      encoded = Enum.join(["+", string, @crlf], "")
-
-      {:ok, encoded}
+      {:ok, join(["+", string, @crlf])}
     end
   end
 
   def encode_bulk_string(string) do
     bytes = byte_size(string)
-    encoded = Enum.join(["$", bytes, @crlf, string, @crlf])
 
-    {:ok, encoded}
+    {:ok, join(["$", bytes, @crlf, string, @crlf])}
   end
 
   defp bulk_string?(string) do
     String.contains?(string, @cr) or String.contains?(string, @lf)
+  end
+
+  defp join(parts) do
+    Enum.join(parts, "")
   end
 end
